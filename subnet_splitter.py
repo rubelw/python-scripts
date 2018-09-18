@@ -31,11 +31,28 @@ def main(cidr,number_of_subnets):
     print("I'm a beautiful CLI ✨")
     s = IPSplitter(cidr)
     (prefix,suffix) = cidr.split('/')
-    print('prefix: '+str(prefix))
-    print('suffix: '+str(suffix))
-    print(s.get_available_ranges())
+    print('Available ranges: '+str(s.get_available_ranges()))
 
-    print(s.get_subnet(int(suffix)+2, count=int(number_of_subnets)))
+    loop_count=0
+    flag=False
+    suffix=int(suffix)+1
+
+    while not flag:
+
+        try:
+            loop_count+=1
+            subnets = s.get_subnet(suffix, count=int(number_of_subnets))
+
+            for subnet in subnets:
+                print(subnet)
+            flag = True
+
+        except:
+            suffix=int(suffix)+1
+
+            if loop_count>25:
+                flag=True
+                print('can not determine subnets')
 
 if __name__ == "__main__":
     main()
